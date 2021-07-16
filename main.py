@@ -20,7 +20,7 @@ def get_image_path() -> str:
 
 def load_image(file_path: str):
 
-    img = Image.open(file_path).convert("RGBA")
+    img = Image.open(file_path).convert("RGB")
 
     img.show()
 
@@ -28,7 +28,7 @@ def load_image(file_path: str):
 
     arr = np.array(img)
 
-    print(arr)
+    print(arr[0][0])
 
     return arr
 
