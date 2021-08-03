@@ -1,37 +1,43 @@
-import sys
-import numpy as np
-from os import path
 from PIL import Image
+from skimage.metrics import mean_squared_error as mse
+from utils import get_imgs
+from tools import to_vector, split_images
 
-def get_image_path() -> str:
-    if len(sys.argv) <= 1:
-        print("there is no arguments")
-        exit(0)
+def compare_imgs():
 
-    file_path = sys.argv[1]
+    imgs = get_imgs()
 
-    if not path.isfile(file_path):
-        print("not a file")
-        exit(0)
+    img_A = to_vector(imgs[0])
+    img_B = to_vector(imgs[1])
 
-    print(sys.argv)
-    
-    return file_path
+    matrices = split_images(img_A, 1, 3)
 
-def load_image(file_path: str):
+    count = 0
+    min_mse = None
+    index = None
 
-    img = Image.open(file_path).convert("RGB")
+    for M in matrices:
 
-    img.show()
+        if img_B.shape != M.shape:
+            img_B = to_vector(imgs[1], M.shape[0], M.shape[1])
+        
+        res = mse(M, img_B)
+        
+        if min_mse == None or res < min_mse:
+            min_mse = res
+            index = count
 
-    print(img)
+        count += 1
 
-    arr = np.array(img)
+    if index == 0:
+        print("EYES")
+    elif index == 1:
+        print("NOSE")
+    else:
+        print("MOUTH")
 
-    print(arr[0][0])
+    Image.fromarray(matrices[index]).show()
 
-    return arr
 
 if __name__ == "__main__":
-    img_path = get_image_path()
-    arr = load_image(img_path)
+    compare_imgs()
