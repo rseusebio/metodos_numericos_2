@@ -18,3 +18,4 @@ Agora é só rodar o arquivo **main.py** passando o caminho da imagem original (
 
 `python3.8 main.py ./imgs/face.png ./imgs/compare/eyes_1.png`
 
+The program should answer what part of the face the second image is and should display these part of the first image.
